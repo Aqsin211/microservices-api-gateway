@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: ms-profile
+              uri: http://ms-profile:8081
+              predicates:
+                - Path=/profiles/**
+              filters:
+                - RewritePath=/profiles/(?<remaining>.*), /profiles/${remaining}
+
+            - id: ms-feedback
+              uri: http://ms-feedback:8082
+              predicates:
+                - Path=/feedback/**
+              filters:
+                - RewritePath=/feedback/(?<remaining>.*), /feedback/${remaining}
+
+            - id: ms-profile-docs
+              uri: http://ms-profile:8081
+              predicates:
+                - Path=/profiles/v3/api-docs
+
+            - id: ms-feedback-docs
+              uri: http://ms-feedback:8082
+              predicates:
+                - Path=/feedback/v3/api-docs
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+    urls:
+      - name: ms-profile
+        url: /profiles/v3/api-docs
+      - name: ms-feedback
+        url: /feedback/v3/api-docs
+    urls-primary-name: ms-profile
+    display-request-duration: true
+    operations-sorter: method
+  api-docs:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+server:
+  port: 8080

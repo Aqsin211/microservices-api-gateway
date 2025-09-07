@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: ms-profile
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/test-database
+    username: postgres
+    password: Postgres1234567890
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+springdoc:
+  api-docs:
+    path: /profiles/v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+server:
+  port: 8081
